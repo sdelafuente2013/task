@@ -76,3 +76,5 @@ yarn-debug.log*
 /.idea
 .DS_Store
 .idea/
+config/application.yml
+/config/master.key
