@@ -10,6 +10,8 @@ class RecipesController < ApplicationController
     $redis.get('mi_clave')
   end
 
+  def edit; end
+
   def new
     @recipe = Recipe.new
   end

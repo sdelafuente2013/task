@@ -330,7 +330,7 @@ Performance/StringInclude:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 80
+  Max: 120
 
 Lint/Debugger:
   Enabled: true
@@ -340,3 +340,11 @@ Style/MutableConstant:
 
 Lint/AmbiguousBlockAssociation:
   Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: true
+  AllowedVariables:
+    - $redis
