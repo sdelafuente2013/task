@@ -1,12 +1,13 @@
+# frozen_string_literal: true
+
 class RecipesController < ApplicationController
-  before_action :set_recipe, only: [:edit, :update, :destroy]
+  before_action :set_recipe, only: %i[edit update destroy]
 
   def index
     @recipes = Recipe.all
-    $redis.set("mi_clave", "santiagoxD")
+    $redis.set('mi_clave', 'santiagoxD')
 
-    valor = $redis.get("mi_clave")
-    puts valor
+    $redis.get('mi_clave')
   end
 
   def new
@@ -22,6 +23,7 @@ class RecipesController < ApplicationController
       render :new
     end
   end
+
   def update
     if @recipe.update(recipe_params)
       redirect_to @recipe, notice: 'Receta actualizada exitivamente.'
@@ -43,13 +45,12 @@ class RecipesController < ApplicationController
   end
 
   private
+    def set_recipe
+      @recipe = Recipe.find(params[:id])
+    end
 
-  def set_recipe
-    @recipe = Recipe.find(params[:id])
-  end
-
-  def recipe_params
-    params.require(:recipe).permit(:name, :description)
-    # Asegúrate de actualizar la lista de parámetros permitidos con todos los atributos de tu modelo Recipe
-  end
+    def recipe_params
+      params.require(:recipe).permit(:name, :description)
+      # Asegúrate de actualizar la lista de parámetros permitidos con todos los atributos de tu modelo Recipe
+    end
 end

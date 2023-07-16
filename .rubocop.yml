@@ -19,6 +19,8 @@ AllCops:
     - 'actiontext/test/dummy/**/*'
     - '**/node_modules/**/*'
     - 'db/migrate/*'
+    - 'bin/bundle'
+    - 'db/schema.rb'
 
 Performance:
   Exclude:
