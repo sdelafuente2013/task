@@ -1,17 +1,23 @@
-<div class="container mx-auto px-6 pt-6">
-  <h2 class="text-4xl mb-6">Nueva receta</h2>
+<div class="container mx-auto px-6 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-4xl">Nueva receta</h2>
+
+    <%= link_to root_path, class: "text-blue-500 hover:text-blue-600 transition duration-150 ease-in-out" do %>
+      <i class="fas fa-arrow-left"></i> Regresar
+    <% end %>
+  </div>
 
   <%= simple_form_for(@recipe, html: { class: "form" }) do |f| %>
     <div class="mb-4">
-      <%= f.input :name, label: "Nombre", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= f.input :name, label: "Nombre", required: true, placeholder: "Ingresa el nombre de la receta", input_html: { class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" } %>
     </div>
 
     <div class="mb-6">
-      <%= f.input :description, label: "Descripción", as: :text, input_html: { rows: 4 }, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      <%= f.input :description, label: "Descripción", as: :text, required: true, placeholder: "Describe la receta", input_html: { rows: 4, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" } %>
     </div>
 
     <div>
-      <%= f.button :submit, "Crear Receta", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <%= f.button :submit, "Crear Receta", class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
     </div>
   <% end %>
 </div>

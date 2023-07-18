@@ -15,7 +15,9 @@
   <body>
   <main class="container mx-auto mt-28 px-5 flex flex-col">
     <% flash.each do |type, msg| %>
-      <p class="<%= flash_class(type) %>"><%= msg %></p>
+      <div data-controller="flash" class="<%= flash_class(type) %> rounded-lg shadow-lg p-4 mb-4 transition-opacity duration-3000 ease-in-out w-64">
+        <p class="text-white font-bold text-sm"><%= msg %></p>
+      </div>
     <% end %>
 
     <%= yield %>
