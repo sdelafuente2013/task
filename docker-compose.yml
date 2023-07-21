@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/db_development
+      - REDIS_URL=redis://redis:6379/0
+    command: >
+      bash -c "
+        rm -f tmp/pids/server.pid &&
+        echo 'Postgres is ready, running the migrations...' &&
+        bundle exec rails db:migrate &&
+        rails server -b 0.0.0.0
+      "
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=db_development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  tailwindcss:
+    build: .
+    command: rails tailwindcss:watch[always]
+    volumes:
+      - .:/myapp

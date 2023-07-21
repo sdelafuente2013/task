@@ -2,7 +2,7 @@
 FROM ruby:3.2.1
 
 # Instalar dependencias
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+RUN apt-get update -qq && apt-get install -y postgresql-client
 
 # Establecer el directorio de trabajo en /myapp
 WORKDIR /myapp
@@ -19,6 +19,3 @@ COPY . /myapp
 
 # Exponer el puerto en el que se ejecutará la aplicación
 EXPOSE 3000
-
-# Comando para iniciar la aplicación
-CMD ["rails", "server", "-b", "0.0.0.0"]
