@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   db:
+    container_name: db
     image: postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -12,10 +13,12 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
   redis:
+    container_name: redis
     image: redis
     ports:
       - "6379:6379"
   web:
+    container_name: web
     build:
       context: .
       dockerfile: Dockerfile
@@ -39,11 +42,13 @@ services:
         rails server -b 0.0.0.0
       "
   tailwindcss:
+    container_name: tailwindcss
     build: .
     command: rails tailwindcss:watch[always]
     volumes:
       - .:/myapp
   nginx:
+    container_name: nginx
     build:
       context: .
       dockerfile: Dockerfile.nginx
@@ -51,3 +56,11 @@ services:
       - 80:80
     depends_on:
       - web
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 9090:8080
