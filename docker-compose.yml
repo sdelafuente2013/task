@@ -1,5 +1,20 @@
 version: '3.8'
 services:
+  db:
+    image: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    environment:
+      - POSTGRES_DB=db_development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
   web:
     build:
       context: .
@@ -9,8 +24,10 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
-      - redis
+      redis:
+        condition: service_started
+      db:
+        condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/db_development
       - REDIS_URL=redis://redis:6379/0
@@ -21,18 +38,16 @@ services:
         bundle exec rails db:migrate &&
         rails server -b 0.0.0.0
       "
-  db:
-    image: postgres
-    environment:
-      - POSTGRES_DB=db_development
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
   tailwindcss:
     build: .
     command: rails tailwindcss:watch[always]
     volumes:
       - .:/myapp
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - 80:80
+    depends_on:
+      - web
