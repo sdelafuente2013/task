@@ -34,6 +34,9 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/db_development
       - REDIS_URL=redis://redis:6379/0
+      - VIRTUAL_HOST=litcode.es
+      - LETSENCRYPT_HOST=litcode.es
+      - LETSENCRYPT_EMAIL=santiago.delafuente@bue.edu.ar
     command: >
       bash -c "
         rm -f tmp/pids/server.pid &&
@@ -47,15 +50,34 @@ services:
     command: rails tailwindcss:watch[always]
     volumes:
       - .:/myapp
-  nginx:
-    container_name: nginx
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
+#  nginx:
+#    container_name: nginx
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.nginx
+#    ports:
+#      - 80:80
+#    depends_on:
+#      - web
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs:rw
     depends_on:
-      - web
+      - nginx-proxy
   adminer:
     container_name: adminer
     image: adminer
