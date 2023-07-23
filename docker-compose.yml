@@ -40,7 +40,7 @@ services:
         rm -f tmp/pids/server.pid &&
         echo 'Postgres is ready, running the migrations...' &&
         bundle exec rails db:migrate &&
-        rails server -b 0.0.0.0
+        RAILS_ENV=production rails server -b 0.0.0.0
       "
   tailwindcss:
     container_name: tailwindcss
@@ -61,14 +61,16 @@ services:
       - 443:443
     depends_on:
       - web
-#  certbot:
-#    image: certbot/certbot
-#    volumes:
-#      - ./certs:/etc/letsencrypt
-#      - html_vol:/var/www/html
+  certbot:
+    container_name: certbot-ssl
+    image: certbot/certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - html_vol:/var/www/html
 #    command: certonly --webroot --webroot-path=/var/www/html --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
-#    depends_on:
-#      - nginx
+    command: renew --quiet
+    depends_on:
+      - nginx
   adminer:
     container_name: client_db_web
     image: adminer
