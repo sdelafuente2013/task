@@ -60,14 +60,14 @@ services:
       - 443:443
     depends_on:
       - web
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./certs:/etc/letsencrypt
-      - html_vol:/var/www/html
-    command: certonly --webroot --webroot-path=/var/www/html --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
-    depends_on:
-      - nginx
+#  certbot:
+#    image: certbot/certbot
+#    volumes:
+#      - ./certs:/etc/letsencrypt
+#      - html_vol:/var/www/html
+#    command: certonly --webroot --webroot-path=/var/www/html --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
+#    depends_on:
+#      - nginx
   adminer:
     container_name: client_db_web
     image: adminer
