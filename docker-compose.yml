@@ -55,6 +55,7 @@ services:
       dockerfile: Dockerfile.nginx
     volumes:
       - html_vol:/var/www/html
+      - ./certs:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443
