@@ -66,6 +66,7 @@ services:
     image: certbot/certbot
     volumes:
       - ./certs:/etc/letsencrypt
+      - .:/myapp
     command: certonly --webroot --webroot-path=/myapp --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
   adminer:
     container_name: client_db_web
