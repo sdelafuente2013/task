@@ -24,8 +24,9 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/myapp
+      - ./certs:/etc/letsencrypt
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
       redis:
         condition: service_started
@@ -51,41 +52,23 @@ services:
     command: rails tailwindcss:watch[always]
     volumes:
       - .:/myapp
-#  nginx:
-#    container_name: nginx
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.nginx
-#    ports:
-#      - 80:80
-#    depends_on:
-#      - web
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     ports:
       - 80:80
       - 443:443
-    volumes:
-      - ./html:/usr/share/nginx/html:rw
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./certs:/etc/nginx/certs:ro
-      - ./vhost.d:/etc/nginx/vhost.d
-
-  letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt
-    environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./certs:/etc/nginx/certs:rw
-      - ./vhost.d:/etc/nginx/vhost.d:rw
-      - ./html:/usr/share/nginx/html:rw
     depends_on:
-      - nginx-proxy
+      - web
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+    command: certonly --webroot --webroot-path=/myapp --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
   adminer:
-    container_name: adminer
+    container_name: client_db_web
     image: adminer
     restart: always
     depends_on:
