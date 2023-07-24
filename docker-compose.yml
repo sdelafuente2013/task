@@ -45,7 +45,10 @@ services:
   tailwindcss:
     container_name: tailwindcss
     build: .
-    command: rails tailwindcss:watch[always]
+#    development:
+#    command: rails tailwindcss:watch[always]
+#    production:
+    command: rails tailwindcss:build
     volumes:
       - .:/myapp
   nginx:
@@ -67,7 +70,9 @@ services:
     volumes:
       - ./certs:/etc/letsencrypt
       - html_vol:/var/www/html
+#     generate certificate ssl:
 #    command: certonly --webroot --webroot-path=/var/www/html --email santiago.delafuente@bue.edu.ar -d litcode.es --agree-tos --non-interactive --keep-until-expiring
+#    update certificate ssl:
     command: renew --quiet
     depends_on:
       - nginx
