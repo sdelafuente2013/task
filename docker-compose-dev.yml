@@ -82,4 +82,4 @@ services:
     ports:
       - 9090:8080
 volumes:
-  cert_vol:
+  html_vol:
