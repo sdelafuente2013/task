@@ -8,6 +8,8 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
+    volumes:
+      - my_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=db_development
       - POSTGRES_USER=postgres
@@ -45,9 +47,6 @@ services:
   tailwindcss:
     container_name: tailwindcss
     build: .
-#    development:
-#    command: rails tailwindcss:watch[always]
-#    production:
     command: rails tailwindcss:build
     volumes:
       - .:/myapp
@@ -85,5 +84,5 @@ services:
     ports:
       - 9090:8080
 volumes:
-  cert_vol:
   html_vol:
+  my_data:
