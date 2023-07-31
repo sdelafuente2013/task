@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Comprobar si existe docker-compose.yml
+if [ -f docker-compose.yml ]; then
+    echo "docker-compose.yml ya existe. No se puede encontrar docker-compose-prod.yml"
+else
+    # Cambiar el nombre de docker-compose-prod.yml a docker-compose.yml
+    mv docker-compose-prod.yml docker-compose.yml
+    # Ejecutar los comandos de Docker Compose
+    docker compose down && docker compose build && docker compose up -d
+    # Cambiar el nombre de docker-compose.yml a docker-compose-prod.yml
+    mv docker-compose.yml docker-compose-prod.yml
+fi
